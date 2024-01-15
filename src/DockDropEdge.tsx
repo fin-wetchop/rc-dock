@@ -51,6 +51,8 @@ export class DockDropEdge extends React.PureComponent<DockDropEdgeProps, any> {
       depth = 1; // depth 1 or 2
     } else if (min < 0.3) {
       // default
+    } else if (min < 0.75) {
+      return {direction: "middle", depth}
     } else if (group.floatable) {
       if (group.floatable === 'singleTab') {
         if (tabLength === 1) {
