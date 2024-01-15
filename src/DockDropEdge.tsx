@@ -29,7 +29,7 @@ export class DockDropEdge extends React.PureComponent<DockDropEdgeProps, any> {
   };
 
 
-  getDirection(e: DragState, group: TabGroup, samePanel: boolean, tabLength: number): {direction: DropDirection, mode?: DockMode, depth: number} {
+  getDirection(e: DragState, fromGroup: TabGroup, toGroup: TabGroup, samePanel: boolean, tabLength: number): {direction: DropDirection, mode?: DockMode, depth: number} {
     let rect = this._ref.getBoundingClientRect();
     let widthRate = Math.min(rect.width, 500);
     let heightRate = Math.min(rect.height, 500);
@@ -39,7 +39,7 @@ export class DockDropEdge extends React.PureComponent<DockDropEdgeProps, any> {
     let bottom = (rect.bottom - e.clientY) / heightRate;
     let min = Math.min(left, right, top, bottom);
     let depth = 0;
-    if (group.disableDock || samePanel) {
+    if (fromGroup.disableDock || toGroup.disableDock || samePanel) {
       // use an impossible min value to disable dock drop
       min = 1;
     }
@@ -53,8 +53,8 @@ export class DockDropEdge extends React.PureComponent<DockDropEdgeProps, any> {
       // default
     } else if (min < 0.75) {
       return {direction: "middle", depth}
-    } else if (group.floatable) {
-      if (group.floatable === 'singleTab') {
+    } else if (fromGroup.floatable) {
+      if (fromGroup.floatable === 'singleTab') {
         if (tabLength === 1) {
           // singleTab can float only with one tab
           return {direction: 'float', mode: 'float', depth: 0};
@@ -123,6 +123,7 @@ export class DockDropEdge extends React.PureComponent<DockDropEdgeProps, any> {
     let draggingPanel = DragState.getData('panel', dockId);
 
     let fromGroup = this.context.getGroup(dropFromPanel.group);
+    let toGroup = this.context.getGroup(panelData.group);
     if (draggingPanel && draggingPanel.parent?.mode === 'float') {
       // ignore float panel in edge mode
       return;
@@ -131,7 +132,7 @@ export class DockDropEdge extends React.PureComponent<DockDropEdgeProps, any> {
       direction,
       mode,
       depth
-    } = this.getDirection(e, fromGroup, draggingPanel === panelData, draggingPanel?.tabs?.length ?? 1);
+    } = this.getDirection(e, fromGroup, toGroup, draggingPanel === panelData, draggingPanel?.tabs?.length ?? 1);
     depth = this.getActualDepth(depth, mode, direction);
     if (!direction || (direction === 'float' && dropFromPanel.panelLock)) {
       this.context.setDropRect(null, 'remove', this);
@@ -154,6 +155,7 @@ export class DockDropEdge extends React.PureComponent<DockDropEdgeProps, any> {
     let {panelData, dropFromPanel} = this.props;
     let dockId = this.context.getDockId();
     let fromGroup = this.context.getGroup(dropFromPanel.group);
+    let toGroup = this.context.getGroup(panelData.group);
     let source: TabData | PanelData = DragState.getData('tab', dockId);
     let draggingPanel = DragState.getData('panel', dockId);
     if (!source) {
@@ -164,7 +166,7 @@ export class DockDropEdge extends React.PureComponent<DockDropEdgeProps, any> {
         direction,
         mode,
         depth
-      } = this.getDirection(e, fromGroup, draggingPanel === panelData, draggingPanel?.tabs?.length ?? 1);
+      } = this.getDirection(e, fromGroup, toGroup, draggingPanel === panelData, draggingPanel?.tabs?.length ?? 1);
       depth = this.getActualDepth(depth, mode, direction);
       if (!direction) {
         return;
