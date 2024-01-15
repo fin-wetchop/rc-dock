@@ -39,7 +39,7 @@ export class DockDropEdge extends React.PureComponent<DockDropEdgeProps, any> {
     let bottom = (rect.bottom - e.clientY) / heightRate;
     let min = Math.min(left, right, top, bottom);
     let depth = 0;
-    if (fromGroup.disableDock || toGroup.disableDock || samePanel) {
+    if (fromGroup.disableDock || samePanel) {
       // use an impossible min value to disable dock drop
       min = 1;
     }
@@ -51,7 +51,7 @@ export class DockDropEdge extends React.PureComponent<DockDropEdgeProps, any> {
       depth = 1; // depth 1 or 2
     } else if (min < 0.3) {
       // default
-    } else if (min < 0.75) {
+    } else if (min < 0.75 && !toGroup.disableDock) {
       return {direction: "middle", depth}
     } else if (fromGroup.floatable) {
       if (fromGroup.floatable === 'singleTab') {
