@@ -95,7 +95,7 @@ body > .dragging-layer > div:last-child {
   padding: 4px 14px;
   outline-color: #108ee9;
 }
-.dock-tab:last-child .dock-tab-hit-area {
+.dock-tab:last-of-type .dock-tab-hit-area {
   right: -999999px;
 }
 .dock-tab:hover {

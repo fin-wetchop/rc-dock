@@ -87,12 +87,12 @@ export class TabCache {
             }
             else if (tab && tab !== this.data) {
                 let direction = this.getDropDirection(e);
-                this.context.setDropRect(this._hitAreaRef, direction, this);
+                this.context.setDropRect(this._hitAreaRef.parentElement, direction, this);
                 e.accept('');
             }
             else if (panel && panel !== this.data.parent) {
                 let direction = this.getDropDirection(e);
-                this.context.setDropRect(this._hitAreaRef, direction, this);
+                this.context.setDropRect(this._hitAreaRef.parentElement, direction, this);
                 e.accept('');
             }
         };
