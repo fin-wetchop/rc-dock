@@ -129,7 +129,7 @@ export class TabCache {
         return false;
     }
     getDropDirection(e) {
-        let rect = this._hitAreaRef.getBoundingClientRect();
+        let rect = this._hitAreaRef.parentElement.getBoundingClientRect();
         let midx = rect.left + rect.width * 0.5;
         return e.clientX > midx ? 'after-tab' : 'before-tab';
     }
