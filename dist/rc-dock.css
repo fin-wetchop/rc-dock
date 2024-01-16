@@ -95,6 +95,9 @@ body > .dragging-layer > div:last-child {
   padding: 4px 14px;
   outline-color: #108ee9;
 }
+.dock-tab:last-child .dock-tab-hit-area {
+  right: -999999px;
+}
 .dock-tab:hover {
   color: #349fec;
 }
@@ -192,8 +195,8 @@ body > .dragging-layer > div:last-child {
   pointer-events: none;
   top: 0;
   bottom: 0;
-  left: -5px;
-  right: -5px;
+  left: 0;
+  right: 0;
 }
 .dock-pane-cache {
   width: 100%;
