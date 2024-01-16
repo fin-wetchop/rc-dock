@@ -63,6 +63,12 @@
       padding: 4px 14px;
       outline-color: @primary-color;
     }
+
+    &:last-child {
+      .dock-tab-hit-area {
+        right: -999999px;
+      }
+    }
   }
 
   &-tab:hover {
@@ -187,8 +193,8 @@
     pointer-events: none;
     top: 0;
     bottom: 0;
-    left: -5px;
-    right: -5px;
+    left: 0;
+    right: 0;
   }
 
   &-pane-cache {
