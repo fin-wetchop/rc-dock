@@ -126,10 +126,10 @@ export class DockDropEdge extends React.PureComponent<DockDropEdgeProps, any> {
 
     let fromGroup = this.context.getGroup(dropFromPanel.group);
     let toGroup = this.context.getGroup(panelData.group);
-    if (draggingPanel && draggingPanel.parent?.mode === 'float') {
-      // ignore float panel in edge mode
-      return;
-    }
+    // if (draggingPanel && draggingPanel.parent?.mode === 'float') {
+    //   // ignore float panel in edge mode
+    //   return;
+    // }
     let {
       direction,
       mode,
