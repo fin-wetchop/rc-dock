@@ -118,16 +118,18 @@ export class DockDropEdge extends React.PureComponent<DockDropEdgeProps, any> {
   }
 
   onDragOver = (e: DragState) => {
+    console.log(e, "drag over")
+
     let {panelData, panelElement, dropFromPanel} = this.props;
     let dockId = this.context.getDockId();
     let draggingPanel = DragState.getData('panel', dockId);
 
     let fromGroup = this.context.getGroup(dropFromPanel.group);
     let toGroup = this.context.getGroup(panelData.group);
-    // if (draggingPanel && draggingPanel.parent?.mode === 'float') {
-    //   // ignore float panel in edge mode
-    //   return;
-    // }
+    if (draggingPanel && draggingPanel.parent?.mode === 'float') {
+      // ignore float panel in edge mode
+      return;
+    }
     let {
       direction,
       mode,
