@@ -16,6 +16,11 @@ export declare class DockDropEdge extends React.PureComponent<DockDropEdgeProps,
         mode?: DockMode;
         depth: number;
     };
+    getFloatDirection(e: DragState, fromGroup: TabGroup, toGroup: TabGroup, samePanel: boolean, tabLength: number): {
+        direction: DropDirection;
+        mode?: DockMode;
+        depth: number;
+    };
     getActualDepth(depth: number, mode: DockMode, direction: DropDirection): number;
     onDragOver: (e: DragState) => void;
     onDragLeave: (e: DragState) => void;

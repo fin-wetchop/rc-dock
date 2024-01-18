@@ -81,6 +81,61 @@ export class DockDropEdge extends React.PureComponent<DockDropEdgeProps, any> {
     return {direction: null, depth: 0};
   }
 
+  getFloatDirection(e: DragState, fromGroup: TabGroup, toGroup: TabGroup, samePanel: boolean, tabLength: number): {direction: DropDirection, mode?: DockMode, depth: number} {
+    let rect = this._ref.getBoundingClientRect();
+
+    let left = e.clientX - rect.left;
+    let right = rect.right - e.clientX;
+    let top = e.clientY - rect.top;
+    let bottom = rect.bottom - e.clientY;
+
+    let min = Math.min(left, right, top, bottom);
+
+    let depth = 0;
+
+    if (fromGroup.disableDock || samePanel) {
+      // use an impossible min value to disable dock drop
+      min = 1;
+    }
+
+    if (min < 0) {
+      return {direction: null, depth: 0};
+    } else if (min < 10) {
+      depth = 3; // depth 3 or 4
+    } else if (min < 20) {
+      depth = 1; // depth 1 or 2
+    } else if (min < 30) {
+      // default
+    } else if (fromGroup.floatable) {
+      if (fromGroup.floatable === 'singleTab') {
+        if (tabLength === 1) {
+          // singleTab can float only with one tab
+          return {direction: 'float', mode: 'float', depth: 0};
+        }
+      } else {
+        return {direction: 'float', mode: 'float', depth: 0};
+      }
+    }
+
+    switch (min) {
+      case left: {
+        return {direction: 'left', mode: 'horizontal', depth};
+      }
+      case right: {
+        return {direction: 'right', mode: 'horizontal', depth};
+      }
+      case top: {
+        return {direction: 'top', mode: 'vertical', depth};
+      }
+      case bottom: {
+        return {direction: 'bottom', mode: 'vertical', depth};
+      }
+    }
+
+    // probably a invalid input causing everything to be NaN?
+    return {direction: null, depth: 0};
+  }
+
   getActualDepth(depth: number, mode: DockMode, direction: DropDirection): number {
     let afterPanel = (direction === 'bottom' || direction === 'right');
     if (!depth) {
@@ -122,6 +177,8 @@ export class DockDropEdge extends React.PureComponent<DockDropEdgeProps, any> {
     let dockId = this.context.getDockId();
     let draggingPanel = DragState.getData('panel', dockId);
 
+    const isFloating = draggingPanel && draggingPanel.parent?.mode === 'float';
+
     let fromGroup = this.context.getGroup(dropFromPanel.group);
     let toGroup = this.context.getGroup(panelData.group);
     // if (draggingPanel && draggingPanel.parent?.mode === 'float') {
@@ -132,11 +189,8 @@ export class DockDropEdge extends React.PureComponent<DockDropEdgeProps, any> {
       direction,
       mode,
       depth
-    } = this.getDirection(e, fromGroup, toGroup, draggingPanel === panelData, draggingPanel?.tabs?.length ?? 1);
-    if (
-      draggingPanel &&
-      draggingPanel.parent?.mode === 'float'
-    ) {
+    } = (isFloating ? this.getFloatDirection : this.getDirection)(e, fromGroup, toGroup, draggingPanel === panelData, draggingPanel?.tabs?.length ?? 1);
+    if (isFloating) {
       if (
         !["left", "right", "top", "bottom"].includes(direction) ||
         depth !== 3
@@ -172,6 +226,9 @@ export class DockDropEdge extends React.PureComponent<DockDropEdgeProps, any> {
     let toGroup = this.context.getGroup(panelData.group);
     let source: TabData | PanelData = DragState.getData('tab', dockId);
     let draggingPanel = DragState.getData('panel', dockId);
+
+    const isFloating = draggingPanel && draggingPanel.parent?.mode === 'float'
+
     if (!source) {
       source = draggingPanel;
     }
@@ -180,10 +237,9 @@ export class DockDropEdge extends React.PureComponent<DockDropEdgeProps, any> {
         direction,
         mode,
         depth
-      } = this.getDirection(e, fromGroup, toGroup, draggingPanel === panelData, draggingPanel?.tabs?.length ?? 1);
+      } = (isFloating ? this.getFloatDirection : this.getDirection)(e, fromGroup, toGroup, draggingPanel === panelData, draggingPanel?.tabs?.length ?? 1);
       if (
-        draggingPanel &&
-        draggingPanel.parent?.mode === 'float' &&
+        isFloating &&
         ["left", "right", "top", "bottom"].includes(direction) &&
         depth === 3
       ) {
