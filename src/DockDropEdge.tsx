@@ -135,14 +135,19 @@ export class DockDropEdge extends React.PureComponent<DockDropEdgeProps, any> {
     } = this.getDirection(e, fromGroup, toGroup, draggingPanel === panelData, draggingPanel?.tabs?.length ?? 1);
     if (
       draggingPanel &&
-      draggingPanel.parent?.mode === 'float' &&
-      (
+      draggingPanel.parent?.mode === 'float'
+    ) {
+      if (
         !["left", "right", "top", "bottom"].includes(direction) ||
         depth !== 3
-      ) 
-    ) {
-      // ignore float panel in edge mode
-      return;
+      ) {
+        // ignore float panel in edge mode
+        return;
+      }
+
+      if (depth === 3) {
+        depth = 1
+      }
     }
     depth = this.getActualDepth(depth, mode, direction);
     if (!direction || (direction === 'float' && dropFromPanel.panelLock)) {
