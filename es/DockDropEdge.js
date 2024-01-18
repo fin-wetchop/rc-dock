@@ -46,7 +46,7 @@ export class DockDropEdge extends React.PureComponent {
             this.context.setDropRect(null, 'remove', this);
         };
         this.onDrop = (e) => {
-            var _a, _b;
+            var _a, _b, _c;
             let { panelData, dropFromPanel } = this.props;
             let dockId = this.context.getDockId();
             let fromGroup = this.context.getGroup(dropFromPanel.group);
@@ -58,6 +58,12 @@ export class DockDropEdge extends React.PureComponent {
             }
             if (source) {
                 let { direction, mode, depth } = this.getDirection(e, fromGroup, toGroup, draggingPanel === panelData, (_b = (_a = draggingPanel === null || draggingPanel === void 0 ? void 0 : draggingPanel.tabs) === null || _a === void 0 ? void 0 : _a.length) !== null && _b !== void 0 ? _b : 1);
+                if (draggingPanel &&
+                    ((_c = draggingPanel.parent) === null || _c === void 0 ? void 0 : _c.mode) === 'float' &&
+                    ["left", "right", "top", "bottom"].includes(direction) &&
+                    depth === 3) {
+                    depth = 0;
+                }
                 depth = this.getActualDepth(depth, mode, direction);
                 if (!direction) {
                     return;
