@@ -27,9 +27,7 @@ export class DockDropEdge extends React.PureComponent {
                     // ignore float panel in edge mode
                     return;
                 }
-                if (depth === 3) {
-                    depth = 1;
-                }
+                depth = 0;
             }
             depth = this.getActualDepth(depth, mode, direction);
             if (!direction || (direction === 'float' && dropFromPanel.panelLock)) {
