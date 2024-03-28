@@ -324,6 +324,29 @@ export class DockLayout extends DockPortalManager implements DockContext {
     }
   }
 
+  update() {
+    let {layout, defaultLayout, loadTab} = this.props;
+    let preparedLayout: LayoutData;
+    if (defaultLayout) {
+      preparedLayout = this.prepareInitData(this.props.defaultLayout);
+    } else if (!loadTab) {
+      throw new Error('DockLayout.loadTab and DockLayout.defaultLayout should not both be undefined.');
+    }
+
+    if (layout) {
+      // controlled layout
+      this.state = {
+        layout: DockLayout.loadLayoutData(layout, this.props),
+        dropRect: null,
+      };
+    } else {
+      this.state = {
+        layout: preparedLayout,
+        dropRect: null,
+      };
+    }
+  }
+
   /** @inheritDoc */
   navigateToPanel(fromElement?: HTMLElement, direction?: string) {
     if (!direction) {

@@ -49,7 +49,7 @@
     "@types/react-dom": "^18.0.6",
     "@types/shelljs": "^0.8.11",
     "less": "^4.1.2",
-    "parcel": "1.12.4",
+    "parcel": "^1.12.3",
     "prismjs": "^1.26.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
