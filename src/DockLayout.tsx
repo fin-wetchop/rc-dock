@@ -324,6 +324,7 @@ export class DockLayout extends DockPortalManager implements DockContext {
     }
   }
 
+  /** @inheritDoc */
   update() {
     let {layout, defaultLayout, loadTab} = this.props;
     let preparedLayout: LayoutData;
