@@ -300,6 +300,10 @@ export interface DockContext {
      */
     updateTab(id: string, newTab: TabData | null, makeActive?: boolean): boolean;
     /**
+     * Update layout
+     */
+    update(): void;
+    /**
      * Move focus to a dockpanel nearby
      * @param fromElement
      * @param direction

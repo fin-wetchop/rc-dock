@@ -116,6 +116,7 @@ export declare class DockLayout extends DockPortalManager implements DockContext
     getLayoutSize(): LayoutSize;
     /** @inheritDoc */
     updateTab(id: string, newTab: TabData | null, makeActive?: boolean): boolean;
+    update(): void;
     /** @inheritDoc */
     navigateToPanel(fromElement?: HTMLElement, direction?: string): void;
     constructor(props: LayoutProps);
